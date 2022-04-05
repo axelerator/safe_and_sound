@@ -20,11 +20,14 @@ module SafeAndSound
     def test_that_type_can_be_defined_with_variants
       SafeAndSound
         .define(:MyTypeWithAField, AVariant: {})
-    end
 
-    def test_that_variant_can_be_constructed
       variant = MyTypeWithAField::AVariant.new
       refute_nil variant
+    end
+
+    def test_that_variant_can_has_fields
+      SafeAndSound
+        .define(:TypeWithAField, AVariant: { aField: String })
     end
   end
 end
