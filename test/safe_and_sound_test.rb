@@ -1,9 +1,9 @@
 # frozen_string_literal: true
+
 require 'test_helper'
 
 module SafeAndSound
   class SafeAndSoundTest < Minitest::Test
-
     def test_that_type_can_be_defined
       type = SafeAndSound.define :MyType
 
@@ -18,8 +18,8 @@ module SafeAndSound
     end
 
     def test_that_type_can_be_defined_with_variants
-       SafeAndSound
-         .define(:MyTypeWithAField, AVariant: {})
+      SafeAndSound
+        .define(:MyTypeWithAField, AVariant: {})
     end
 
     def test_that_variant_can_be_constructed
