@@ -28,6 +28,8 @@ module SafeAndSound
     def test_that_variant_can_has_fields
       SafeAndSound
         .define(:TypeWithAField, AVariant: { aField: String })
+
+      variant = TypeWithAField::AVariant.new(aField: 'Foo')
     end
   end
 end
