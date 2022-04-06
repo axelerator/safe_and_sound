@@ -30,6 +30,8 @@ module SafeAndSound
         .define(:TypeWithAField, AVariant: { aField: String })
 
       variant = TypeWithAField::AVariant.new(aField: 'Foo')
+
+      assert_equal 'Foo', variant.aField
     end
   end
 end
