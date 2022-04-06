@@ -33,5 +33,18 @@ module SafeAndSound
 
       assert_equal 'Foo', variant.aField
     end
+
+    def test_that_variant_expects_exact_fields
+      SafeAndSound.define(:TypeWithTwoFields,
+                          AVariant: { aField: String, anotherField: Integer })
+
+      assert_raises MissingConstructorArg do
+        TypeWithTwoFields::AVariant.new(aField: 'Foo')
+      end
+
+      assert_raises UnknownConstructorArg do
+        TypeWithTwoFields::AVariant.new(aField: 'Foo', anotherField: 42, notAField: 23)
+      end
+    end
   end
 end

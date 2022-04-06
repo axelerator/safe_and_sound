@@ -12,12 +12,8 @@ module SafeAndSound
     new_type = Class.new
     Object.const_set(type_name, new_type)
 
-    variants = variants.map do |variant_name, fields|
-      new_variant = Class.new(Variant)
-      fields.each { |field, _| new_variant.attr_reader field }
-      new_type.const_set(variant_name.to_s, new_variant)
-      new_variant
-    end
+    variants =
+      variants.map { |variant_name, fields| Variant.build(variant_name, fields, new_type) }
 
     new_type
   end
