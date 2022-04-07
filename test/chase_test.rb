@@ -73,5 +73,16 @@ module SafeAndSound
                      otherwise -> { 42 }
                    end)
     end
+
+    def test_that_variant_fields_can_be_accessed_in_match_expression
+      type = SafeAndSound.new(Variant: { field: Integer })
+
+      variant = type.Variant field: 22
+
+      assert_equal(42,
+                   chase(variant) do
+                     wenn type::Variant, -> { field + 20 }
+                   end)
+    end
   end
 end
