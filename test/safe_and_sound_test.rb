@@ -5,68 +5,60 @@ require 'test_helper'
 module SafeAndSound
   class SafeAndSoundTest < Minitest::Test
     def test_that_type_can_be_defined
-      type = SafeAndSound.define :MyType
+      type = SafeAndSound.define
 
-      assert_equal 'MyType', type.name
-      refute_nil MyType
+      refute_nil type
 
       assert_raises BaseTypeCannotBeInstantiated do
-        MyType.new
-      end
-    end
-
-    def test_that_type_name_must_be_sym
-      assert_raises ArgumentError do
-        SafeAndSound.define 'MyType'
+        type.new
       end
     end
 
     def test_that_type_can_be_defined_with_variants
-      SafeAndSound
-        .define(:MyTypeWithAField, AVariant: {})
+      type = SafeAndSound.define(AVariant: {})
 
-      variant = MyTypeWithAField::AVariant.new
+      variant = type::AVariant.new
       refute_nil variant
     end
 
     def test_that_variant_can_has_fields
-      SafeAndSound
-        .define(:TypeWithAField, AVariant: { aField: String })
+      type = SafeAndSound
+             .define(AVariant: { aField: String })
 
-      variant = TypeWithAField::AVariant.new(aField: 'Foo')
+      variant = type::AVariant.new(aField: 'Foo')
 
       assert_equal 'Foo', variant.aField
     end
 
     def test_that_variant_expects_exact_fields
-      SafeAndSound.define(:TypeWithTwoFields,
-                          AVariant: { aField: String, anotherField: Integer })
+      type =
+        SafeAndSound.define(AVariant: { aField: String, anotherField: Integer })
 
       assert_raises MissingConstructorArg do
-        TypeWithTwoFields::AVariant.new(aField: 'Foo')
+        type::AVariant.new(aField: 'Foo')
       end
 
       assert_raises UnknownConstructorArg do
-        TypeWithTwoFields::AVariant.new(aField: 'Foo', anotherField: 42, notAField: 23)
+        type::AVariant.new(aField: 'Foo', anotherField: 42, notAField: 23)
       end
     end
 
     def test_that_variant_expects_fields_of_correct_type
-      SafeAndSound.define(:TypeWithAStringField,
-                          AVariant: { aString: String })
+      type =
+        SafeAndSound.define(AVariant: { aString: String })
 
       assert_raises WrgonConstructorArgType do
-        TypeWithAStringField::AVariant.new(aString: 42)
+        type::AVariant.new(aString: 42)
       end
     end
 
     def test_that_variants_are_subclasses_of_type
-      SafeAndSound
-        .define(:ParentType, Variant: {})
+      type = SafeAndSound
+             .define(Variant: {})
 
-      variant = ParentType::Variant.new
+      variant = type::Variant.new
 
-      assert variant.is_a?(ParentType)
+      assert variant.is_a?(type)
     end
   end
 end
