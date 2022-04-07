@@ -5,7 +5,7 @@ require 'test_helper'
 module SafeAndSound
   class SafeAndSoundTest < Minitest::Test
     def test_that_type_can_be_defined
-      type = SafeAndSound.define
+      type = SafeAndSound.new
 
       refute_nil type
 
@@ -15,7 +15,7 @@ module SafeAndSound
     end
 
     def test_that_type_can_be_defined_with_variants
-      type = SafeAndSound.define(AVariant: {})
+      type = SafeAndSound.new(AVariant: {})
 
       variant = type::AVariant.new
       refute_nil variant
@@ -23,7 +23,7 @@ module SafeAndSound
 
     def test_that_variant_can_has_fields
       type = SafeAndSound
-             .define(AVariant: { aField: String })
+             .new(AVariant: { aField: String })
 
       variant = type::AVariant.new(aField: 'Foo')
 
@@ -32,7 +32,7 @@ module SafeAndSound
 
     def test_that_variant_expects_exact_fields
       type =
-        SafeAndSound.define(AVariant: { aField: String, anotherField: Integer })
+        SafeAndSound.new(AVariant: { aField: String, anotherField: Integer })
 
       assert_raises MissingConstructorArg do
         type::AVariant.new(aField: 'Foo')
@@ -45,7 +45,7 @@ module SafeAndSound
 
     def test_that_variant_expects_fields_of_correct_type
       type =
-        SafeAndSound.define(AVariant: { aString: String })
+        SafeAndSound.new(AVariant: { aString: String })
 
       assert_raises WrgonConstructorArgType do
         type::AVariant.new(aString: 42)
@@ -54,7 +54,7 @@ module SafeAndSound
 
     def test_that_variants_are_subclasses_of_type
       type = SafeAndSound
-             .define(Variant: {})
+             .new(Variant: {})
 
       variant = type::Variant.new
 
