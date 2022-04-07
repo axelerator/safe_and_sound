@@ -28,6 +28,10 @@ module SafeAndSound
         "<#{self.class.superclass.name}:#{self.class.variant_name} ..."
       end
 
+      def variant_type?
+        true
+      end
+
       private
 
       def initialize_field(field_name, value)
@@ -60,6 +64,7 @@ module SafeAndSound
     def self.create_variant_type(parent_type)
       Class.new(parent_type) do
         include(Initializer)
+        include(Functions)
         class << self
           attr_accessor :fields, :variant_name
         end

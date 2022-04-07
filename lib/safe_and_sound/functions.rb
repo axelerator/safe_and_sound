@@ -13,8 +13,10 @@ module SafeAndSound
     end
   end
 
+  class MatchedChaseValueNotAVariant < StandardError; end
   class MissingChaseBranch < StandardError; end
   class DuplicateChaseBranch < StandardError; end
+  class ChaseValueNotAVariant < StandardError; end
 
   ##
   # Instance represent one application of a 'chase'
@@ -24,6 +26,11 @@ module SafeAndSound
     NO_FALLBACK = Object.new
 
     def initialize(object)
+      unless object.respond_to?(:variant_type?)
+        raise ChaseValueNotAVariant,
+              "Matched value in chase expression must be a variant but is a #{object.class.name}"
+      end
+
       @result = NO_MATCH
       @object = object
       @to_match = object.class.superclass.variants.dup
@@ -42,6 +49,11 @@ module SafeAndSound
     end
 
     def wenn(variant, lmda)
+      unless variant.is_a?(Class) && variant.superclass == @object.class.superclass
+        raise MatchedChaseValueNotAVariant,
+              "The value matched against must be a variant of #{@object.class.superclass.name} "\
+              "but is a #{variant.class}"
+      end
       unless @to_match.delete(variant)
         raise DuplicateChaseBranch,
               "There are multiple branches for variant: #{variant.variant_name}"

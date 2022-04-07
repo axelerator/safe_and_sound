@@ -84,5 +84,25 @@ module SafeAndSound
                      wenn type::Variant, -> { field + 20 }
                    end)
     end
+
+    def test_that_chase_raises_if_not_matched_against_variant
+      type = SafeAndSound.new(Variant: {})
+
+      assert_raises ChaseValueNotAVariant do
+        chase(42) do
+          wenn type::Variant, -> { 0 }
+        end
+      end
+    end
+
+    def test_that_chase_raises_if_match_value_not_a_variant
+      type = SafeAndSound.new(Variant: {})
+
+      assert_raises MatchedChaseValueNotAVariant do
+        chase(type.Variant) do
+          wenn 'not_a_variant', -> { 0 }
+        end
+      end
+    end
   end
 end
