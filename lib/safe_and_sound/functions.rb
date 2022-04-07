@@ -17,7 +17,10 @@ module SafeAndSound
   # Instance represent one application of a 'chase'
   # statement.
   class Chase
+    NO_MATCH = Object.new
+
     def initialize(object)
+      @result = NO_MATCH
       @object = object
       @matched = []
     end
@@ -28,7 +31,7 @@ module SafeAndSound
     end
 
     def wenn(variant, lmda)
-      return if @result
+      return unless @result == NO_MATCH
 
       @result = @object.instance_exec(&lmda) if @object.is_a? variant
       @matched << variant
