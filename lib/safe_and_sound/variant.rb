@@ -3,6 +3,7 @@
 module SafeAndSound
   class MissingConstructorArg < StandardError; end
   class UnknownConstructorArg < StandardError; end
+  class WrgonConstructorArgType < StandardError; end
 
   ##
   # base class for a variant of the newly defined types
@@ -34,9 +35,15 @@ module SafeAndSound
     private
 
     def initialize_field(field_name, value)
-      unless self.class.fields[field_name]
+      field_type = self.class.fields[field_name]
+      if field_type.nil?
         raise UnknownConstructorArg,
               "#{self.class.name} does not have a constructor argument #{field_name}"
+      end
+
+      unless value.is_a?(field_type)
+        raise WrgonConstructorArgType,
+              "#{field_name} must be of type #{field_type} but was #{value.class.name}"
       end
 
       instance_variable_set("@#{field_name}", value)

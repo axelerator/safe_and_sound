@@ -46,5 +46,14 @@ module SafeAndSound
         TypeWithTwoFields::AVariant.new(aField: 'Foo', anotherField: 42, notAField: 23)
       end
     end
+
+    def test_that_variant_expects_fields_of_correct_type
+      SafeAndSound.define(:TypeWithAStringField,
+                          AVariant: { aString: String })
+
+      assert_raises WrgonConstructorArgType do
+        TypeWithAStringField::AVariant.new(aString: 42)
+      end
+    end
   end
 end
