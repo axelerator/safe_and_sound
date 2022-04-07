@@ -46,6 +46,9 @@ module SafeAndSound
       new_variant.fields = fields
       fields.each { |field, _| new_variant.attr_reader field }
       parent_type.const_set(variant_name.to_s, new_variant)
+      parent_type.define_singleton_method(variant_name) do |**args|
+        new_variant.new(**args)
+      end
       new_variant
     end
 

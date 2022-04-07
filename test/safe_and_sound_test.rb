@@ -60,5 +60,15 @@ module SafeAndSound
 
       assert variant.is_a?(type)
     end
+
+    def test_that_variants_can_be_constructed_with_shortcut
+      type = SafeAndSound.new(AVariant: { fieldA: String, fieldB: Integer })
+
+      variant = type.AVariant fieldA: 'Foo', fieldB: 42
+
+      refute_nil variant
+      assert_equal 'Foo', variant.fieldA
+      assert_equal 42, variant.fieldB
+    end
   end
 end

@@ -9,7 +9,7 @@ module SafeAndSound
     def test_that_chase_can_be_called
       type = SafeAndSound.new(Variant: {})
 
-      variant = type::Variant.new
+      variant = type.Variant
 
       result =
         chase variant do
@@ -21,8 +21,8 @@ module SafeAndSound
 
     def test_chase_with_multiple_branches
       type = SafeAndSound.new(A: {}, B: {})
-      a = type::A.new
-      b = type::B.new
+      a = type.A
+      b = type.B
 
       assert_equal(42,
                    chase(a) do
