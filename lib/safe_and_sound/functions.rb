@@ -21,19 +21,22 @@ module SafeAndSound
   # statement.
   class Chase
     NO_MATCH = Object.new
+    NO_FALLBACK = Object.new
 
     def initialize(object)
       @result = NO_MATCH
       @object = object
       @to_match = object.class.superclass.variants.dup
+      @otherwise = NO_FALLBACK
     end
 
     def run(block)
       instance_eval(&block)
-      unless @to_match.empty?
+      unless @to_match.empty? || @otherwise != NO_FALLBACK
         raise MissingChaseBranch,
               "Missing branches for variants: #{@to_match.map(&:variant_name).join(',')}"
       end
+      return @otherwise if @result == NO_MATCH
 
       @result
     end
@@ -46,6 +49,10 @@ module SafeAndSound
       return unless @result == NO_MATCH
 
       @result = @object.instance_exec(&lmda) if @object.is_a? variant
+    end
+
+    def otherwise(value)
+      @otherwise = value.call
     end
   end
 end

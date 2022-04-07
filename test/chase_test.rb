@@ -61,5 +61,17 @@ module SafeAndSound
         end
       end
     end
+
+    def test_that_otherwise_covers_missing_branches
+      type = SafeAndSound.new(Variant: {}, MissingVariant: {})
+
+      variant = type.MissingVariant
+
+      assert_equal(42,
+                   chase(variant) do
+                     wenn type::Variant, -> { 0 }
+                     otherwise -> { 42 }
+                   end)
+    end
   end
 end
