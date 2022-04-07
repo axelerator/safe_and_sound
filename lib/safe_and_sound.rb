@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require 'safe_and_sound/functions'
 require 'safe_and_sound/type'
 require 'safe_and_sound/variant'
 require 'safe_and_sound/version'
