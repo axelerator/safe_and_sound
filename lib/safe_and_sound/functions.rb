@@ -13,6 +13,8 @@ module SafeAndSound
     end
   end
 
+  class MissingChaseBranch < StandardError; end
+
   ##
   # Instance represent one application of a 'chase'
   # statement.
@@ -22,19 +24,24 @@ module SafeAndSound
     def initialize(object)
       @result = NO_MATCH
       @object = object
-      @matched = []
+      @to_match = object.class.superclass.variants.dup
     end
 
     def run(block)
       instance_eval(&block)
+      unless @to_match.empty?
+        raise MissingChaseBranch,
+              "Missing branches for variants: #{@to_match.map(&:variant_name).join(',')}"
+      end
+
       @result
     end
 
     def wenn(variant, lmda)
+      @to_match.delete(variant)
       return unless @result == NO_MATCH
 
       @result = @object.instance_exec(&lmda) if @object.is_a? variant
-      @matched << variant
     end
   end
 end

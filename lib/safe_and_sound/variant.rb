@@ -24,6 +24,10 @@ module SafeAndSound
         raise MissingConstructorArg, "Not all constructor arguments were supplied: #{missing_fields}"
       end
 
+      def to_s
+        "<#{self.class.superclass.name}:#{self.class.variant_name} ..."
+      end
+
       private
 
       def initialize_field(field_name, value)
@@ -44,6 +48,7 @@ module SafeAndSound
     def self.build(variant_name, fields, parent_type)
       new_variant = create_variant_type(parent_type)
       new_variant.fields = fields
+      new_variant.variant_name = variant_name
       fields.each { |field, _| new_variant.attr_reader field }
       parent_type.const_set(variant_name.to_s, new_variant)
       parent_type.define_singleton_method(variant_name) do |**args|
@@ -56,7 +61,7 @@ module SafeAndSound
       Class.new(parent_type) do
         include(Initializer)
         class << self
-          attr_accessor :fields
+          attr_accessor :fields, :variant_name
         end
 
         def initialize(**args)

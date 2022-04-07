@@ -11,11 +11,10 @@ module SafeAndSound
   def self.new(**variants)
     new_type = Class.new(Type)
 
-    variants =
+    new_type.variants =
       variants.map do |variant_name, fields|
         Variant.build(variant_name, fields, new_type)
       end
-
     new_type
   end
 end

@@ -9,5 +9,9 @@ module SafeAndSound
     def initialize
       raise BaseTypeCannotBeInstantiated, 'You cannot create instances of this type directly but only of its variants'
     end
+
+    class << self
+      attr_accessor :variants
+    end
   end
 end

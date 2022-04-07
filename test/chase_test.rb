@@ -36,5 +36,17 @@ module SafeAndSound
                      wenn type::B, -> { -42 }
                    end)
     end
+
+    def test_that_chase_raises_on_missing_branches
+      type = SafeAndSound.new(Variant: {}, MissingVariant: {})
+
+      variant = type.Variant
+
+      assert_raises MissingChaseBranch do
+        chase variant do
+          wenn type::Variant, -> { 42 }
+        end
+      end
+    end
   end
 end
