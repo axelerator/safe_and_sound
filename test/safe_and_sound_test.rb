@@ -9,6 +9,10 @@ module SafeAndSound
 
       assert_equal 'MyType', type.name
       refute_nil MyType
+
+      assert_raises BaseTypeCannotBeInstantiated do
+        MyType.new
+      end
     end
 
     def test_that_type_name_must_be_sym
@@ -54,6 +58,15 @@ module SafeAndSound
       assert_raises WrgonConstructorArgType do
         TypeWithAStringField::AVariant.new(aString: 42)
       end
+    end
+
+    def test_that_variants_are_subclasses_of_type
+      SafeAndSound
+        .define(:ParentType, Variant: {})
+
+      variant = ParentType::Variant.new
+
+      assert variant.is_a?(ParentType)
     end
   end
 end
