@@ -14,6 +14,7 @@ module SafeAndSound
   end
 
   class MissingChaseBranch < StandardError; end
+  class DuplicateChaseBranch < StandardError; end
 
   ##
   # Instance represent one application of a 'chase'
@@ -38,7 +39,10 @@ module SafeAndSound
     end
 
     def wenn(variant, lmda)
-      @to_match.delete(variant)
+      unless @to_match.delete(variant)
+        raise DuplicateChaseBranch,
+              "There are multiple branches for variant: #{variant.variant_name}"
+      end
       return unless @result == NO_MATCH
 
       @result = @object.instance_exec(&lmda) if @object.is_a? variant

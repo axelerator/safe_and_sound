@@ -48,5 +48,18 @@ module SafeAndSound
         end
       end
     end
+
+    def test_that_chase_raises_on_duplicate_branches
+      type = SafeAndSound.new(Variant: {})
+
+      variant = type.Variant
+
+      assert_raises DuplicateChaseBranch do
+        chase variant do
+          wenn type::Variant, -> { 42 }
+          wenn type::Variant, -> { -42 }
+        end
+      end
+    end
   end
 end
