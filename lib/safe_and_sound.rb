@@ -19,4 +19,5 @@ module SafeAndSound
   end
 end
 
+require 'safe_and_sound/result'
 require 'safe_and_sound/maybe'
