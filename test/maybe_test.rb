@@ -23,5 +23,12 @@ module SafeAndSound
       assert_equal 23, nothing.with_default(23)
       assert_equal 42, just.with_default(23)
     end
+
+    def test_values
+      nothing = Maybe.Nothing
+      just = Maybe.Just(value: 42)
+
+      assert_equal [42], Maybe.values([nothing, just])
+    end
   end
 end

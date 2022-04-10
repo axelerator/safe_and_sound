@@ -14,5 +14,18 @@ module SafeAndSound
       end
     end
   end
+
+  module MaybeClassMethods
+    include SafeAndSound::Functions
+    def values(maybes)
+      maybes.inject([]) do |sum, maybe|
+        chase maybe do
+          wenn Maybe::Just, -> { sum.push(value) }
+          wenn Maybe::Nothing, -> { sum }
+        end
+      end
+    end
+  end
   Maybe.include(MaybeMethods)
+  Maybe.extend(MaybeClassMethods)
 end
