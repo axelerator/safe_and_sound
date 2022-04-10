@@ -5,8 +5,8 @@ require File.expand_path('lib/safe_and_sound/version', __dir__)
 Gem::Specification.new do |spec|
   spec.name        = 'safe_and_sound'
   spec.version     = SafeAndSound::VERSION
-  spec.summary     = 'Algebraic Data Types'
-  spec.description = 'A compact DSL to give you ADTs and define safe functions on them.'
+  spec.summary     = 'Sum Data Types'
+  spec.description = 'A compact DSL to let you declare sum data types and define safe functions on them.'
   spec.authors     = ['Axel Tetzlaff']
   spec.email       = 'axel.tetzlaff@gmx.de'
   spec.files       = ['lib/safe_and_sound.rb']
