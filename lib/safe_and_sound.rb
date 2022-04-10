@@ -18,3 +18,5 @@ module SafeAndSound
     new_type
   end
 end
+
+require 'safe_and_sound/maybe'
