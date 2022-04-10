@@ -2,19 +2,14 @@
 
 require '../lib/safe_and_sound'
 
-Result = SafeAndSound.new(
-  Ok: { value: Object },
-  Err: { msg: String }
-)
-
 ##
 # Main app
 class Main
   include SafeAndSound::Functions
 
   def run # rubocop:disable Metrics/AbcSize
-    ok = Result.Ok value: 42
-    error = Result.Err msg: 'Something went wrong!'
+    ok = SafeAndSound::Result.Ok value: 42
+    error = SafeAndSound::Result.Err error: 'Something went wrong!'
 
     puts result_to_s(ok)
     # Success! 42
@@ -28,76 +23,57 @@ class Main
     puts result_to_s(to_int('foo'))
     # BAM! foo is not a number
 
-    puts result_to_s(
-      and_then(to_int('11')) { |i| to_valid_month(i) }
-    )
-    # Success! Nov
-
-    puts result_to_s(
-      and_then(to_int('42')) { |i| to_valid_month(i) }
-    )
-    # BAM! must be a integer between 1 and 12
-
-    puts
-    to_int('11')
+    result =
+      to_int('11')
       .and_then { |i| to_valid_month_num(i) }
       .and_then { |i| to_month_name(i) }
+    puts result_to_s(result)
     # Success! Nov
-  end
 
-  ##
-  # Module with methods we want to add to our Result type
-  module ResultMethods
-    def and_then(&block)
-      chase self do
-        wenn Result::Ok, ->  { block.call(value) }
-        wenn Result::Err, -> { self }
-      end
-    end
+    result =
+      to_int('42')
+      .and_then { |i| to_valid_month_num(i) }
+      .and_then { |i| to_month_name(i) }
+    puts result_to_s(result)
+    # BAM! must be a integer between 1 and 12
   end
-  Result.include ResultMethods
 
   def result_to_s(result)
     chase result do
-      wenn Result::Ok, ->  { "Success! #{value}" }
-      wenn Result::Err, -> { "BAM! #{msg}" }
+      wenn SafeAndSound::Result::Ok, ->  { "Success! #{value}" }
+      wenn SafeAndSound::Result::Err, -> { "BAM! #{error}" }
     end
   end
 
-  def and_then(result, &block)
-    chase result do
-      wenn Result::Ok, ->  { block.call(value) }
-      wenn Result::Err, -> { result }
-    end
-  end
-
+  ##
+  # @return Ok(value: Integer) if string can be parsed into an integer
+  # @return  Error(error: String) if string is not a valid integer
+  #
   def to_int(str)
-    Result.Ok value: Integer(str)
+    SafeAndSound::Result.Ok value: Integer(str)
   rescue ArgumentError
-    Result.Err msg: "#{str} is not a number"
+    SafeAndSound::Result.Err error: "#{str} is not a number"
   end
 
   MONTHS =
     %i[Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec].freeze
 
-  def to_valid_month(int)
-    if int >= 1 && int <= 12
-      Result.Ok value: MONTHS[int - 1]
-    else
-      Result.Err msg: 'must be a integer between 1 and 12'
-    end
-  end
-
+  ##
+  # @return Ok(value: Integer) if input integer is beteween 1 and 12
+  # @return  Error(error: String) if input is outside valid range
+  #
   def to_valid_month_num(int)
     if int >= 1 && int <= 12
-      Result.Ok value: int
+      SafeAndSound::Result.Ok value: int
     else
-      Result.Err msg: 'must be a integer between 1 and 12'
+      SafeAndSound::Result.Err error: 'must be a integer between 1 and 12'
     end
   end
 
+  ##
+  # Expects [int] to be a valid month number and always returns a month name
   def to_month_name(int)
-    Result.Ok value: MONTHS[int - 1]
+    SafeAndSound::Result.Ok value: MONTHS[int - 1]
   end
 end
 
