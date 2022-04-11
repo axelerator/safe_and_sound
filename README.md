@@ -1,3 +1,5 @@
+![Unit tests](https://github.com/axelerator/safe_and_sound/actions/workflows/run-tests.yml/badge.svg)
+
 # Safe and Sound: Sum Data Types and utilities for Ruby
 
 This library gives you and alternative syntax to declare new types/classes.
