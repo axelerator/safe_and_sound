@@ -40,8 +40,8 @@ include SafeAndSound::Functions
 
 def to_human(vehicle)
   chase vehicle do
-    Vehicle::Car,  -> { "I'm a car with #{horsepower} horsepower" }
-    Vehicle::Bike, -> { "I'm a bike with #{gears} gears" }
+    wenn Vehicle::Car,  -> { "I'm a car with #{horsepower} horsepower" }
+    wenn Vehicle::Bike, -> { "I'm a bike with #{gears} gears" }
   end
 end
 ```
@@ -58,5 +58,6 @@ episode of the _Destroy all software_ screencast.
 I'm not trying to change how Ruby code is written. This is merely an experiment how far the sum type concept can be taken in terms
 of making a syntax for it look like the syntax in languages where this concept is more central.
 
+Check out more examples in the [examples folder](examples).
 
 
