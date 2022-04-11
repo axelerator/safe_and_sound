@@ -9,7 +9,7 @@ These types share some properties with types referred to as _algebaric data type
 We can model similar relationships more verbosely in plain Ruby with classes and subclasses.
 This library provides some syntactic shortcuts to create these hierarchy.
 
-````ruby
+```ruby
 Vehicle = SafeAndSound.new(
     Car: { horsepower: Integer },
     Bike: { gears: Integer}
