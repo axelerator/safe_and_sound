@@ -9,7 +9,7 @@ Gem::Specification.new do |spec|
   spec.description = 'A compact DSL to let you declare sum data types and define safe functions on them.'
   spec.authors     = ['Axel Tetzlaff']
   spec.email       = 'axel.tetzlaff@gmx.de'
-  spec.files       = ['lib/safe_and_sound.rb']
+  spec.files       = Dir['README', 'LICENSE', 'CHANGELOG.md','lib/**/*']
   spec.homepage    = 'https://github.com/axelerator/safe_and_sound'
   spec.license = 'MIT'
   spec.required_ruby_version = '>= 2.5.0'
