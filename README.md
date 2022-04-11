@@ -7,7 +7,7 @@ It's inspired by the concise syntax to declare new types in [Elm](https://guide.
 These types share some properties with types referred to as _algebaric data types_, _sum types_ or _union types_.
 
 We can model similar relationships more verbosely in plain Ruby with classes and subclasses.
-This library provides some syntactic shortcuts to create these hierarchy.
+This library provides some syntactic shortcuts to create these hierarchies.
 
 ```ruby
 Vehicle = SafeAndSound.new(
