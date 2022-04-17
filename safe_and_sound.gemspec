@@ -12,7 +12,7 @@ Gem::Specification.new do |spec|
   spec.files       = Dir['README', 'LICENSE', 'CHANGELOG.md', 'lib/**/*']
   spec.homepage    = 'https://github.com/axelerator/safe_and_sound'
   spec.license = 'MIT'
-  spec.required_ruby_version = '>= 2.5.0'
+  spec.required_ruby_version = '>= 3.1.1'
   spec.extra_rdoc_files = ['README.md']
 
   spec.add_development_dependency 'minitest', '~> 5.15'
