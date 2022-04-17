@@ -24,18 +24,25 @@ module SafeAndSound
       inner_instance = inner_type.InnerVariant(innerField: 42)
       outer_instance = outer_type.OuterVariant(outerField: inner_instance)
 
-      inner_hash = 
+      inner_hash =
         { 'type' => 'InnerVariant',
-          'innerField' => 42
-        }
+          'innerField' => 42 }
       outer_hash =
         { 'type' => 'OuterVariant',
-          'outerField' => inner_hash
-        }
+          'outerField' => inner_hash }
 
       refute_nil outer_instance
       assert_equal outer_hash, outer_instance.as_json
     end
 
+    def test_deserialization
+      type = SafeAndSound
+             .new(AVariant: { aField: String })
+      input_hash =
+        { 'type' => 'AVariant',
+          'aField' => 'Foo' }
+      variant = type.from_json(input_hash.to_json)
+      assert_kind_of type.const_get(:AVariant), variant
+    end
   end
 end

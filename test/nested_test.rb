@@ -16,4 +16,3 @@ module SafeAndSound
     end
   end
 end
-

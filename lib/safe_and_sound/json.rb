@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'json'
 
 module SafeAndSound
@@ -7,7 +8,7 @@ module SafeAndSound
       hash = { 'type' => self.class.variant_name.to_s }
       self.class.fields.each do |field_name, _|
         value = send(field_name)
-        hash[field_name.to_s] = 
+        hash[field_name.to_s] =
           if value.respond_to?(:as_json)
             value.as_json
           else
@@ -28,9 +29,9 @@ module SafeAndSound
         JSON
         .parse(json_string)
         .transform_keys(&:to_sym)
-      variant_name = hash[:type]
-      variant = variants.find { |v| v.name.gsub(/.*::/, '') == variant_name }
-      raise ArgumentError, "Unable to find #{variant_name} for #{type.name}" unless variant
+      variant_name = hash[:type].to_sym
+      variant = variants.find { |v| v.variant_name == variant_name }
+      raise ArgumentError, "Unable to find #{variant_name} for #{name}" unless variant
 
       variant.new(**hash.except(:type))
     end
