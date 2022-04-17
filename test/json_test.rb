@@ -16,5 +16,26 @@ module SafeAndSound
 
       assert_equal expected_hash, variant.as_json
     end
+
+    def test_serialize_nested
+      inner_type = SafeAndSound.new(InnerVariant: { innerField: Integer })
+      outer_type = SafeAndSound.new(OuterVariant: { outerField: inner_type })
+
+      inner_instance = inner_type.InnerVariant(innerField: 42)
+      outer_instance = outer_type.OuterVariant(outerField: inner_instance)
+
+      inner_hash = 
+        { 'type' => 'InnerVariant',
+          'innerField' => 42
+        }
+      outer_hash =
+        { 'type' => 'OuterVariant',
+          'outerField' => inner_hash
+        }
+
+      refute_nil outer_instance
+      assert_equal outer_hash, outer_instance.as_json
+    end
+
   end
 end

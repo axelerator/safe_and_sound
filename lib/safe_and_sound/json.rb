@@ -1,11 +1,18 @@
 # frozen_string_literal: true
+require 'json'
 
 module SafeAndSound
   module ToJson
     def as_json
       hash = { 'type' => self.class.variant_name.to_s }
       self.class.fields.each do |field_name, _|
-        hash[field_name.to_s] = send(field_name)
+        value = send(field_name)
+        hash[field_name.to_s] = 
+          if value.respond_to?(:as_json)
+            value.as_json
+          else
+            value
+          end
       end
       hash
     end
