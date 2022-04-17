@@ -65,6 +65,8 @@ module SafeAndSound
       Class.new(parent_type) do
         include(Initializer)
         include(Functions)
+        include(ToJson)
+
         class << self
           attr_accessor :fields, :variant_name
         end
