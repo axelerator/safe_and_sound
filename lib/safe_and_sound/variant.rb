@@ -41,11 +41,19 @@ module SafeAndSound
                 "#{self.class.name} does not have a constructor argument #{field_name}"
         end
 
-        unless value.is_a?(field_type)
+        if value.is_a?(field_type)
+          instance_variable_set("@#{field_name}", value)
+        else
+          instance_variable_set("@#{field_name}", try_to_initialize_from_hash(field_type, field_name, value))
+        end
+      end
+
+      def try_to_initialize_from_hash(field_type, field_name, value)
+        unless field_type.superclass == Type && value.is_a?(Hash)
           raise WrgonConstructorArgType,
                 "#{field_name} must be of type #{field_type} but was #{value.class.name}"
         end
-        instance_variable_set("@#{field_name}", value)
+        field_type.from_hash(value)
       end
     end
 

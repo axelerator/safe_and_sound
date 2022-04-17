@@ -44,5 +44,20 @@ module SafeAndSound
       variant = type.from_json(input_hash.to_json)
       assert_kind_of type.const_get(:AVariant), variant
     end
+
+    def test_nested_deserialization
+      inner_type = SafeAndSound.new(InnerVariant: { innerField: Integer })
+      outer_type = SafeAndSound.new(OuterVariant: { outerField: inner_type })
+
+      inner_hash =
+        { 'type' => 'InnerVariant',
+          'innerField' => 42 }
+      outer_hash =
+        { 'type' => 'OuterVariant',
+          'outerField' => inner_hash }
+
+      variant = outer_type.from_hash(outer_hash)
+      assert_kind_of outer_type.const_get(:OuterVariant), variant
+    end
   end
 end

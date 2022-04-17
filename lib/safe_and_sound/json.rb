@@ -25,10 +25,11 @@ module SafeAndSound
 
   module FromJson
     def from_json(json_string)
-      hash =
-        JSON
-        .parse(json_string)
-        .transform_keys(&:to_sym)
+      from_hash(JSON.parse(json_string))
+    end
+
+    def from_hash(hash_)
+      hash = hash_.transform_keys(&:to_sym)
       variant_name = hash[:type].to_sym
       variant = variants.find { |v| v.variant_name == variant_name }
       raise ArgumentError, "Unable to find #{variant_name} for #{name}" unless variant
