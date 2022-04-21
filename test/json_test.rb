@@ -68,5 +68,14 @@ module SafeAndSound
       variant = type.from_json(input_hash.to_json)
       assert_kind_of type.const_get(:AVariant), variant
     end
+
+    def test_deserialization_for_primitive_array_field
+      type = SafeAndSound
+             .new(AVariant: { strings: [String] })
+      input_hash =
+        { 'strings' => ['Foo'] }
+      variant = type.from_json(input_hash.to_json)
+      assert_equal ['Foo'], variant.strings
+    end
   end
 end

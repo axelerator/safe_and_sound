@@ -31,7 +31,7 @@ module SafeAndSound
     def from_hash(hash_)
       hash = hash_.transform_keys(&:to_sym)
       variant_name = hash[:type].to_sym if hash[:type]
-      variant = 
+      variant =
         if variant_name.nil? && variants.length == 1
           variants.first
         else

@@ -41,11 +41,35 @@ module SafeAndSound
                 "#{self.class.name} does not have a constructor argument #{field_name}"
         end
 
-        if value.is_a?(field_type)
+        if field_type_matches?(field_type, field_name, value)
           instance_variable_set("@#{field_name}", value)
         else
           instance_variable_set("@#{field_name}", try_to_initialize_from_hash(field_type, field_name, value))
         end
+      end
+
+      def field_type_matches?(field_type, field_name, value)
+        return value.is_a?(field_type) unless field_type.is_a?(Array)
+
+        expected_item_type = field_type.first
+        unless value.is_a?(Array)
+          raise WrgonConstructorArgType,
+                "#{field_name} must be an Array of #{expected_item_type} but was #{value.class}"
+        end
+
+        mismatched_types =
+          value.map do |item|
+            if item.is_a?(expected_item_type)
+              nil
+            else
+              item.class
+            end
+          end.compact
+        return true if mismatched_types.empty?
+
+        raise WrgonConstructorArgType,
+              "Expected #{field_name} to only contain #{expected_item_type}, " \
+              "but also found #{mismatched_types.map(&:name).join(',')}"
       end
 
       def try_to_initialize_from_hash(field_type, field_name, value)

@@ -70,5 +70,21 @@ module SafeAndSound
       assert_equal 'Foo', variant.fieldA
       assert_equal 42, variant.fieldB
     end
+
+    def test_can_declare_array_fields
+      type = SafeAndSound.new(AVariant: { strings: [String] })
+
+      variant = type.AVariant(strings: ['Foo'])
+
+      assert_equal ['Foo'], variant.strings
+    end
+
+    def test_prevent_array_init_with_wrong_item_type
+      type = SafeAndSound.new(AVariant: { strings: [String] })
+      
+      assert_raises WrgonConstructorArgType do
+        type.AVariant(strings: [42])
+      end
+    end
   end
 end
