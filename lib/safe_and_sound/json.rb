@@ -30,8 +30,13 @@ module SafeAndSound
 
     def from_hash(hash_)
       hash = hash_.transform_keys(&:to_sym)
-      variant_name = hash[:type].to_sym
-      variant = variants.find { |v| v.variant_name == variant_name }
+      variant_name = hash[:type].to_sym if hash[:type]
+      variant = 
+        if variant_name.nil? && variants.length == 1
+          variants.first
+        else
+          variants.find { |v| v.variant_name == variant_name }
+        end
       raise ArgumentError, "Unable to find #{variant_name} for #{name}" unless variant
 
       variant.new(**hash.except(:type))

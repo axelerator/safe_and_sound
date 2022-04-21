@@ -59,5 +59,15 @@ module SafeAndSound
       variant = outer_type.from_hash(outer_hash)
       assert_kind_of outer_type.const_get(:OuterVariant), variant
     end
+
+
+    def test_deserialization_for_singular_type
+      type = SafeAndSound
+             .new(AVariant: { aField: String })
+      input_hash =
+        { 'aField' => 'Foo' }
+      variant = type.from_json(input_hash.to_json)
+      assert_kind_of type.const_get(:AVariant), variant
+    end
   end
 end
