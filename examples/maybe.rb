@@ -7,7 +7,7 @@ require '../lib/safe_and_sound'
 class Main
   include SafeAndSound::Functions
 
-  def run # rubocop:disable Metrics/AbcSize
+  def run
     nothing = SafeAndSound::Maybe.Nothing
     just_gold = SafeAndSound::Maybe.Just(value: 'Gold')
     just_silver = SafeAndSound::Maybe.Just(value: 'Silver')

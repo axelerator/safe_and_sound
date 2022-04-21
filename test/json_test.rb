@@ -60,7 +60,6 @@ module SafeAndSound
       assert_kind_of outer_type.const_get(:OuterVariant), variant
     end
 
-
     def test_deserialization_for_singular_type
       type = SafeAndSound
              .new(AVariant: { aField: String })

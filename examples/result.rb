@@ -7,7 +7,7 @@ require '../lib/safe_and_sound'
 class Main
   include SafeAndSound::Functions
 
-  def run # rubocop:disable Metrics/AbcSize
+  def run
     ok = SafeAndSound::Result.Ok value: 42
     error = SafeAndSound::Result.Err error: 'Something went wrong!'
 
