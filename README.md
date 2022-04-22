@@ -32,6 +32,8 @@ bike = Vehicle.bike(gears: 'twentyone')
 
 To add polymorphic behavior we can write functions __without__ having to touch the new types themselves.
 
+## Safe, polymorphic functions
+
 By including the `SafeAndSound::Functions` module we get access to the `chase` function.
 It immitates the `case` statement but uses the knowledge about our types to make it more safe.
 
@@ -60,4 +62,20 @@ of making a syntax for it look like the syntax in languages where this concept i
 
 Check out more examples in the [examples folder](examples).
 
+## JSON serialization/deserialization included
 
+```ruby
+irb(main)> car = Vehicle.Car(horsepower: 100)
+
+irb(main)> car.as_json # converts to a Hash of primitives
+=> {"type"=>"Car", "horsepower"=>100}
+
+irb(main)> puts car.to_json # converts to actual JSON string
+{"type":"Car","horsepower":100}
+
+irb(main)> Vehicle.from_hash({"type"=>"Car", "horsepower"=>100})
+=> #<Vehicle::Car:0x000000010ef49a48 @horsepower=100>
+
+irb(main)> Vehicle.from_json('{"type":"Car","horsepower":100}')
+=> #<Vehicle::Car:0x000000010ef6ae00 @horsepower=100>
+```
