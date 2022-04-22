@@ -69,13 +69,30 @@ module SafeAndSound
       assert_kind_of type.const_get(:AVariant), variant
     end
 
-    def test_deserialization_for_primitive_array_field
+    def test_deserialization_for_array_field_of_nested_type
+      inner_type = SafeAndSound.new(InnerType: { aField: Integer })
       type = SafeAndSound
-             .new(AVariant: { strings: [String] })
+             .new(AVariant: { inners: [inner_type] })
       input_hash =
-        { 'strings' => ['Foo'] }
+        { 'inners' => [{ aField: 42 }] }
       variant = type.from_json(input_hash.to_json)
-      assert_equal ['Foo'], variant.strings
+      assert_equal 42, variant.inners.first.aField
+    end
+
+    def test_serialize_array_field
+      inner_type = SafeAndSound.new(InnerType: { aField: Integer })
+      type = SafeAndSound
+             .new(AVariant: { inners: [inner_type] })
+      expected_hash =
+        { 'type' => 'AVariant',
+          'inners' => [
+            { 'type' => 'InnerType',
+              'aField' => 42 }
+          ] }
+
+      inner = inner_type.InnerType(aField: 42)
+      variant = type.AVariant(inners: [inner])
+      assert_equal expected_hash, variant.as_json
     end
   end
 end

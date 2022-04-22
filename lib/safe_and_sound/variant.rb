@@ -65,14 +65,18 @@ module SafeAndSound
               item.class
             end
           end.compact
-        return true if mismatched_types.empty?
-
-        raise WrgonConstructorArgType,
-              "Expected #{field_name} to only contain #{expected_item_type}, " \
-              "but also found #{mismatched_types.map(&:name).join(',')}"
+        mismatched_types.empty?
       end
 
       def try_to_initialize_from_hash(field_type, field_name, value)
+        if field_type.is_a?(Array)
+          item_type = field_type.first
+          return value.map { |item_hash| item_type.from_hash(item_hash) } if item_type.superclass == Type
+
+          raise WrgonConstructorArgType,
+                "#{field_name} must be array of type #{item_type}"
+
+        end
         unless field_type.superclass == Type && value.is_a?(Hash)
           raise WrgonConstructorArgType,
                 "#{field_name} must be of type #{field_type} but was #{value.class.name}"

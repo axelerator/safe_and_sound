@@ -81,7 +81,7 @@ module SafeAndSound
 
     def test_prevent_array_init_with_wrong_item_type
       type = SafeAndSound.new(AVariant: { strings: [String] })
-      
+
       assert_raises WrgonConstructorArgType do
         type.AVariant(strings: [42])
       end

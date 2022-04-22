@@ -9,7 +9,15 @@ module SafeAndSound
       self.class.fields.each do |field_name, _|
         value = send(field_name)
         hash[field_name.to_s] =
-          if value.respond_to?(:as_json)
+          if value.is_a?(Array)
+            value.map do |item|
+              if item.respond_to?(:as_json)
+                item.as_json
+              else
+                item
+              end
+            end
+          elsif value.respond_to?(:as_json)
             value.as_json
           else
             value
